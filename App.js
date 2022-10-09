@@ -1,14 +1,25 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar } from 'expo-status-bar'
+import React from 'react'
+import { Button, StyleSheet, Text, View } from 'react-native'
+import * as Location from 'expo-location'
 
 export default function App() {
+  async function getUserLocationHandler() {
+    let { status } = await Location.requestForegroundPermissionsAsync()
+    if (status !== 'granted') {
+      setErrorMsg('Permission to access location was denied')
+      return
+    }
+    let location = await Location.getCurrentPositionAsync({})
+    console.log('Location', location)
+  }
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+      <Button title="Get Location" onPress={getUserLocationHandler} />
       <StatusBar style="auto" />
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -18,4 +29,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-});
+})
